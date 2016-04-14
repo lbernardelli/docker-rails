@@ -7,6 +7,8 @@ docker rm -f rails-dev
 
 project_root="$1"; shift
 
+test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhost
+
 exec docker run --name rails-dev \
 -d \
 -p 2200:2200 \
