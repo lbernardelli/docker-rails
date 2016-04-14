@@ -9,9 +9,9 @@ gem --config-file .gemrc install puma --version 3.1.0 && \
 
 COPY puma.rb /etc/
 COPY $_USER-service.sh $_USER.sh $HOME/
-COPY vendor-cache.sh /etc/my_init.d/01-vendor-cache.sh
 # Possible rocker bug: $HOME is empty
-RUN chmod -R 700 /etc/my_init.d && echo "$HOME" > /etc/container_environment/HOME
+RUN chmod -R 700 /etc/my_init.d && echo "$HOME" > /etc/container_environment/HOME && \
+  printf '#!/bin/bash\ntar -jxf vendor.tbz -C "$HOME"/vendor' > /etc/my_init.d/01-vendor-cache.sh
 
 ONBUILD COPY Gemfile* ./
 #ONBUILD MOUNT vendor:/app/vendor
