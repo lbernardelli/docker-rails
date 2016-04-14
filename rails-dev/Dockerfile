@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jdk
+FROM debian:jessie
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
