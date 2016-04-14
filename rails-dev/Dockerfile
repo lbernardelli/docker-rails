@@ -78,7 +78,7 @@ cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.
 EXPOSE 2200
 # --- Configure SSHD ---
 
-RUN apt-get install -y --no-install-recommends locate sudo && \
+RUN apt-get install -y --no-install-recommends git locate sudo && \
 apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS && \
 updatedb
 
@@ -100,4 +100,3 @@ ENTRYPOINT ["/entry.sh"]
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 #VOLUME $HOME/.rbenv
-
