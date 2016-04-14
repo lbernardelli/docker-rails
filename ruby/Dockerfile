@@ -54,7 +54,8 @@ ENV GEM_SPEC_CACHE "/tmp/gemspec"
 ENV GEM_HOME "$HOME/gem-home"
 ENV PATH "$GEM_HOME/bin:$PATH"
 
-RUN printf 'gem: --no-document' > .gemrc && gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
+RUN printf 'gem: --no-document' > .gemrc && \
+  gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
   gem --config-file .gemrc install -v ${BUNDLER_VERSION} bundler && \
   rm -rf "$GEM_HOME"/cache && \
   rm -rf $RM_ITEMS

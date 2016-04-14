@@ -12,8 +12,8 @@ curl gcc g++ make patch binutils libc6-dev \
   libpq-dev unixodbc unixodbc-dev unixodbc-bin ruby-odbc freetds-bin freetds-common freetds-dev postgresql-client \
  "
 
-COPY apt.conf /etc/apt/apt.conf.d/local
-RUN apt-get update && apt-get -y dist-upgrade && \
+RUN printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
+> /etc/apt/apt.conf.d/local && apt-get update && apt-get -y dist-upgrade && \
 apt-get install -y --no-install-recommends $APT_PACKAGES && \
 apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS
 
@@ -41,15 +41,6 @@ ENV GOSU_SHA 18cced029ed8f0bf80adaa6272bf1650ab68f7aa
 RUN curl -fsSL https://github.com/tianon/gosu/releases/download/1.5/gosu-amd64 -o /bin/gosu && chmod 755 /bin/gosu && \
   echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
 
-# --- Docker building tools ---
-RUN apt-get install -y --no-install-recommends lxc && \
-apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS
-
-# Install Rocker: https://github.com/grammarly/rocker
-ENV ROCKER_VERSION 1.1.2
-RUN curl -SL https://github.com/grammarly/rocker/releases/download/"$ROCKER_VERSION"/rocker-"$ROCKER_VERSION"-linux_amd64.tar.gz | tar -xzC /bin && chmod +x /bin/rocker
-# --- Docker building tools ---
-
 ENV _USER app
 ENV HOME /$_USER
 RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_USER && \
@@ -57,14 +48,14 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
 WORKDIR $HOME
-COPY gemrc .gemrc
 ENV GEM_SPEC_CACHE "$HOME/gemspec"
 ENV GEM_HOME "$HOME/gem-home"
 ENV PATH "$GEM_HOME/bin:$PATH"
 
 ENV BUNDLER_VERSION "1.11.2"
 ENV RAILS_VERSION 4.2.5.1
-RUN gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
+RUN printf 'gem: --no-document' > .gemrc && \
+  gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
   gem --config-file .gemrc install -v ${BUNDLER_VERSION} bundler && \
   gem --config-file .gemrc install rails --version "$RAILS_VERSION" && \
   gem --config-file .gemrc install rspec-rails && \
@@ -109,3 +100,4 @@ ENTRYPOINT ["/entry.sh"]
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 #VOLUME $HOME/.rbenv
+
