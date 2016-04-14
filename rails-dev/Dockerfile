@@ -44,8 +44,8 @@ RUN curl -fsSL https://github.com/tianon/gosu/releases/download/1.5/gosu-amd64 -
 ENV _USER app
 ENV HOME /$_USER
 RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_USER && \
-  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && chown $_USER:$_USER -R $HOME && \
-  echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
+  gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && chown $_USER:$_USER -R $HOME
 
 WORKDIR $HOME
 ENV PATH ".gem/bin:$PATH"
@@ -56,11 +56,11 @@ RUN printf 'gem: --no-document' > .gemrc && \
   gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
   gem --config-file .gemrc install -v ${BUNDLER_VERSION} bundler && \
   gem --config-file .gemrc install rails --version "$RAILS_VERSION" && \
-  gem --config-file .gemrc install rspec-rails && \
+  gem --config-file .gemrc install rspec-rails simplecov simplecov-cobertura simplecov-rcov factory_girl && \
   gem --config-file .gemrc install puma --version 3.1.0 && \
   rm -rf $RM_ITEMS
 
-RUN chown $_USER:$_USER -R "$HOME"/.gemrc
+RUN chown $_USER:$_USER -R "$HOME"/.gemrc /usr/lib/ruby /usr/local/lib/ruby
 
 RUN apt-get install -y --no-install-recommends openssh-server && \
 apt-get autoremove --purge -y && apt-get clean && \
