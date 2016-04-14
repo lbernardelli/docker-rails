@@ -67,5 +67,5 @@ COPY syslog-ng-$_USER.conf /etc/syslog-ng/conf.d/$_USER.conf
 # Use baseimage-docker's init system.
 ENTRYPOINT ["/sbin/my_init"]
 
-#PUSH m4ucorp/ruby:2.3.0
+#PUSH elifarley/docker-rails:ruby-2.3.0
 
