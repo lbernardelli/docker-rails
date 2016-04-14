@@ -48,9 +48,7 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
 WORKDIR $HOME
-ENV GEM_SPEC_CACHE "$HOME/gemspec"
-ENV GEM_HOME "$HOME/gem-home"
-ENV PATH "$GEM_HOME/bin:$PATH"
+ENV PATH ".gem/bin:$PATH"
 
 ENV BUNDLER_VERSION "1.11.2"
 ENV RAILS_VERSION 4.2.5.1
@@ -60,10 +58,9 @@ RUN printf 'gem: --no-document' > .gemrc && \
   gem --config-file .gemrc install rails --version "$RAILS_VERSION" && \
   gem --config-file .gemrc install rspec-rails && \
   gem --config-file .gemrc install puma --version 3.1.0 && \
-  rm -rf "$GEM_HOME"/cache && \
   rm -rf $RM_ITEMS
 
-RUN chown $_USER:$_USER -R "$HOME"/.gemrc "$GEM_HOME"
+RUN chown $_USER:$_USER -R "$HOME"/.gemrc
 
 RUN apt-get install -y --no-install-recommends openssh-server && \
 apt-get autoremove --purge -y && apt-get clean && \
@@ -78,7 +75,7 @@ cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.
 EXPOSE 2200
 # --- Configure SSHD ---
 
-RUN apt-get install -y --no-install-recommends git locate sudo && \
+RUN apt-get install -y --no-install-recommends vim less locate sudo git && \
 apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS && \
 updatedb
 
@@ -90,8 +87,9 @@ RUN echo "TZ set to '$TZ'" && echo $TZ > /etc/TZ && rm -f /etc/localtime && ln -
 
 ENV TERM=xterm-256color
 
-RUN printf "GEM_SPEC_CACHE=$GEM_SPEC_CACHE\nGEM_HOME=$GEM_HOME\nPATH=$PATH\n" >> "$HOME"/.ssh/environment && \
-  echo ". '$HOME'/.ssh/environment" >> "$HOME"/.bashrc && chown $_USER:$_USER "$HOME"/.ssh/environment
+RUN printf "PATH=$PATH\n" >> "$HOME"/.ssh/environment && \
+  printf ". '$HOME'/.ssh/environment\ncd /data\ntest ! -d vendor/bundle && bundle install --path vendor/bundle && du -hs vendor/*\npwd" \
+    >> "$HOME"/.bashrc && chown $_USER:$_USER "$HOME"/.ssh/environment
 
 ADD https://raw.githubusercontent.com/elifarley/docker-jenkins-slaves/master/entry.sh /entry.sh
 RUN chmod +x /entry.sh
