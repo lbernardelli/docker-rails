@@ -29,10 +29,10 @@ ENV RM_ITEMS "\
 /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg /var/backups/* /usr/share/man /usr/share/doc\
 "
 
-COPY apt.conf /etc/apt/apt.conf.d/local
 RUN locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
 
-RUN apt-get update && apt-get -y dist-upgrade && \
+RUN printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
+> /etc/apt/apt.conf.d/local && apt-get update && apt-get -y dist-upgrade && \
 apt-get install -y --no-install-recommends $APT_PACKAGES && \
 apt-get remove --purge -y $APT_REMOVE_PACKAGES && apt-get autoremove --purge -y && apt-get clean && \
 rm -rf $RM_ITEMS /etc/my_init.d/00_regen_ssh_host_keys.sh /etc/service/sshd /etc/cron.daily/{apt,passwd}
@@ -50,12 +50,11 @@ ENV HOME /$_USER
 RUN adduser --disabled-password --home=$HOME --gecos "" $_USER && mkdir $HOME/webapp && chown $_USER:$_USER -R $HOME
 
 WORKDIR $HOME
-COPY gemrc .gemrc
 ENV GEM_SPEC_CACHE "/tmp/gemspec"
 ENV GEM_HOME "$HOME/gem-home"
 ENV PATH "$GEM_HOME/bin:$PATH"
 
-RUN gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
+RUN printf 'gem: --no-document' > .gemrc && gem --config-file .gemrc update --system ${RUBYGEMS_VERSION} && \
   gem --config-file .gemrc install -v ${BUNDLER_VERSION} bundler && \
   rm -rf "$GEM_HOME"/cache && \
   rm -rf $RM_ITEMS
