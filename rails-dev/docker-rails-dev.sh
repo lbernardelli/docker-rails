@@ -14,5 +14,5 @@ exec docker run --name rails-dev \
 -p 2200:2200 \
 -v ~/.ssh/id_rsa.pub:/mnt-ssh-config/authorized_keys:ro \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
--v "$project_root":/app/project-root \
+-v "$project_root":/data \
 "$IMAGE" "$@"
