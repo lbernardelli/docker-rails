@@ -82,7 +82,7 @@ updatedb
 # Install Pathogen - https://github.com/tpope/vim-pathogen
 RUN mkdir -p "$HOME"/.vim/autoload "$HOME"/.vim/bundle && \
 curl -fsSL https://tpo.pe/pathogen.vim > "$HOME"/.vim/autoload/pathogen.vim && \
-touch "$HOME"/.vimrc && sed -i '1 i\execute pathogen#infect()' "$HOME"/.vimrc && \
+printf 'execute pathogen#infect()\nsyntax on\nfiletype plugin indent on\n' > "$HOME"/.vimrc && \
 ( cd ~/.vim/bundle && \
   git clone git://github.com/tpope/vim-rails.git && \
   git clone git://github.com/tpope/vim-bundler.git && \
