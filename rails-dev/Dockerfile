@@ -44,8 +44,12 @@ RUN curl -fsSL https://github.com/tianon/gosu/releases/download/1.5/gosu-amd64 -
 ENV _USER app
 ENV HOME /$_USER
 RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_USER && \
+  curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.tar.gz \
+  | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
+
+RUN 
 
 WORKDIR $HOME
 ENV PATH ".gem/bin:$PATH"
