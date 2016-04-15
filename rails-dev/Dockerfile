@@ -49,8 +49,6 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 
-RUN 
-
 WORKDIR $HOME
 ENV PATH ".gem/bin:$PATH"
 
@@ -86,7 +84,7 @@ updatedb
 # Install Pathogen - https://github.com/tpope/vim-pathogen
 RUN mkdir -p "$HOME"/.vim/autoload "$HOME"/.vim/bundle && \
 curl -fsSL https://tpo.pe/pathogen.vim > "$HOME"/.vim/autoload/pathogen.vim && \
-printf 'execute pathogen#infect()\ncall pathogen#helptags()\nsyntax on\nfiletype plugin indent on\n' > "$HOME"/.vimrc && \
+sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimrc '' > "$HOME"/.vimrc && \
 ( cd ~/.vim/bundle && \
   git clone git://github.com/tpope/vim-rails.git && \
   git clone git://github.com/tpope/vim-bundler.git && \
