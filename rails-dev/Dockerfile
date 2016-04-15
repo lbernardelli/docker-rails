@@ -89,7 +89,7 @@ sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimr
   git clone git://github.com/tpope/vim-rails.git && \
   git clone git://github.com/tpope/vim-bundler.git && \
   git clone git://github.com/tpope/vim-fugitive.git \
-) && vim -u NONE -c "helptags vim-fugitive/doc" -c q
+)
 
 ENV LANG en_US.UTF-8
 #RUN locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
