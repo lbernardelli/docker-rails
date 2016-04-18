@@ -44,7 +44,7 @@ RUN curl -fsSL https://github.com/tianon/gosu/releases/download/1.5/gosu-amd64 -
 ENV _USER app
 ENV HOME /$_USER
 RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_USER && \
-  curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.1.tar.gz \
+  curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.2.tar.gz \
   | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
   curl -fsSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark > "$HOME"/.dircolors && \
