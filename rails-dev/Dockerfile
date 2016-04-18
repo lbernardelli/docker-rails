@@ -90,9 +90,10 @@ curl -fsSL https://raw.githubusercontent.com/jnurmine/Zenburn/master/colors/zenb
 curl -fsSL https://tpo.pe/pathogen.vim > "$HOME"/.vim/autoload/pathogen.vim && \
 sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimrc && \
 ( cd ~/.vim/bundle && \
+  git clone git://github.com/tpope/vim-vinegar.git && \
+  git clone git://github.com/tpope/vim-fugitive.git && \
   git clone git://github.com/tpope/vim-rails.git && \
-  git clone git://github.com/tpope/vim-bundler.git && \
-  git clone git://github.com/tpope/vim-fugitive.git \
+  git clone git://github.com/tpope/vim-bundler.git \
 )
 
 ENV LANG en_US.UTF-8
