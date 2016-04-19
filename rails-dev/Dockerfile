@@ -44,7 +44,7 @@ RUN curl -fsSL https://github.com/tianon/gosu/releases/download/1.5/gosu-amd64 -
 ENV _USER app
 ENV HOME /$_USER
 RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_USER && \
-  curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.4.tar.gz \
+  curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
   | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
   curl -fsSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark > "$HOME"/.dircolors && \
@@ -89,7 +89,8 @@ curl -fsSL https://raw.githubusercontent.com/sjl/badwolf/master/colors/badwolf.v
 curl -fsSL https://raw.githubusercontent.com/jnurmine/Zenburn/master/colors/zenburn.vim > "$HOME"/.vim/colors/zenburn.vim && \
 curl -fsSL https://tpo.pe/pathogen.vim > "$HOME"/.vim/autoload/pathogen.vim && \
 sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimrc && \
-( cd ~/.vim/bundle && \
+( cd ~/.vim/bundle && mkdir -p csapprox && curl -fsSL https://github.com/godlygeek/csapprox/archive/4.00.tar.gz \
+  | tar --strip 1 -zxC csapprox && \
   git clone git://github.com/tpope/vim-vinegar.git && \
   git clone https://github.com/ervandew/supertab && \
   git clone https://github.com/ctrlpvim/ctrlp.vim.git && \
