@@ -16,7 +16,7 @@ mkdir -p "$(dirname "$DDE_BASH_HISTORY")" && touch "$DDE_BASH_HISTORY"
 
 exec docker run --name rails-dev --hostname "$project_name" \
 -d \
--p 2200:2200 \
+-p 2200:2200 -p 3000:3000 \
 -v ~/.ssh/id_rsa.pub:/mnt-ssh-config/authorized_keys:ro \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
 -v ~/.ssh/known_hosts:/mnt-ssh-config/known_hosts:ro \
