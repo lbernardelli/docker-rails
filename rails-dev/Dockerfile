@@ -100,7 +100,7 @@ sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimr
   git clone git://github.com/tpope/vim-bundler.git \
 ) && \
 curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
-(cd /tmp/ctags-5.8 && ./configure && make && make install)
+(cd /tmp/ctags-5.8 && ./configure && make && make install && cd && rm -rf /tmp/*)
 
 ENV LANG en_US.UTF-8
 #RUN locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
