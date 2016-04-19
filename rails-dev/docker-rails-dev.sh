@@ -5,14 +5,16 @@ IMAGE="elifarley/docker-rails:rails-dev"
 project_root="$1"; shift
 test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhost
 
+project_name="$(basename "$project_root")"
+
 docker pull "$IMAGE"
 
 docker rm -f rails-dev
 
-DDE_BASH_HISTORY=~/.dde/bash-history-"$(basename "$project_root")"
+DDE_BASH_HISTORY=~/.dde/bash-history-"$project_name"
 mkdir -p "$(dirname "$DDE_BASH_HISTORY")" && touch "$DDE_BASH_HISTORY"
 
-exec docker run --name rails-dev \
+exec docker run --name rails-dev --hostname "$project_name" \
 -d \
 -p 2200:2200 \
 -v ~/.ssh/id_rsa.pub:/mnt-ssh-config/authorized_keys:ro \
