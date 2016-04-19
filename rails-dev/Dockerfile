@@ -66,6 +66,8 @@ RUN printf 'gem: --no-document' > .gemrc && \
 
 RUN chown -R $_USER:$_USER /usr/lib/ruby /usr/local/lib/ruby
 
+EXPOSE 3000
+
 RUN apt-get install -y --no-install-recommends openssh-server && \
 apt-get autoremove --purge -y && apt-get clean && \
 rm -rf /etc/cron.daily/{apt,passwd} $RM_ITEMS
