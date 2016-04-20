@@ -12,7 +12,10 @@ docker pull "$IMAGE"
 docker rm -f rails-dev
 
 DDE_BASH_HISTORY=~/.dde/bash-history-"$project_name"
-mkdir -p "$(dirname "$DDE_BASH_HISTORY")" && touch "$DDE_BASH_HISTORY"
+DDE_VIMINFO=~/.dde/viminfo/"$project_name"
+mkdir -p "$(dirname "$DDE_VIMINFO")" && \
+touch "$DDE_BASH_HISTORY" && \
+touch "$DDE_VIMINFO"
 
 exec docker run --name rails-dev --hostname "$project_name" \
 -d \
@@ -21,5 +24,6 @@ exec docker run --name rails-dev --hostname "$project_name" \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
 -v ~/.ssh/known_hosts:/mnt-ssh-config/known_hosts:ro \
 -v "$DDE_BASH_HISTORY":/app/.bash_history \
+-v "$(dirname "$DDE_VIMINFO")":/app/.vim/viminfo \
 -v "$project_root":/data \
 "$IMAGE" "$@"
