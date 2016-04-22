@@ -1,6 +1,6 @@
 #!/bin/bash
 set -x
-IMAGE="elifarley/docker-rails:rails-dev"
+IMAGE="elifarley/docker-dev-env:debian-dde-rails"
 
 project_root="$1"; shift
 test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhost
