@@ -62,6 +62,7 @@ RUN printf 'gem: --no-document' > .gemrc && \
 
 
 RUN printf "#!/bin/sh\ndate > /tmp/boot-time.txt" > /etc/my_init.d/00-log-boot-time.sh
+COPY env-vars.sh /etc/my_init.d/01-env-vars.sh
 
 COPY syslog-ng-$_USER.conf /etc/syslog-ng/conf.d/$_USER.conf
 
@@ -69,4 +70,3 @@ COPY syslog-ng-$_USER.conf /etc/syslog-ng/conf.d/$_USER.conf
 ENTRYPOINT ["/sbin/my_init"]
 
 #PUSH elifarley/docker-rails:ruby-2.3.0
-
