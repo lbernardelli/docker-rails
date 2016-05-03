@@ -21,7 +21,7 @@ ONBUILD RUN bundle install --no-cache --jobs 4 --retry 3 --local && \
   tar -cjf vendor.tbz -C vendor --exclude=*.gem . && \
   du -hs vendor.tbz
 
-ONBUILD RUN mkdir -p /etc/service/app && mv /app/app-service.sh  /etc/service/app/run
+ONBUILD RUN mkdir -p /etc/service/app && mv /app/app-service.sh /etc/service/app/run && chmod +x /etc/service/app/run
 ONBUILD COPY . /app/
 ONBUILD RUN chown -R nobody:nogroup /app ; chmod -f +x app.sh; \
 if test -f crontab; then \
