@@ -1,4 +1,4 @@
-FROM elifarley/docker-rails:ruby-2.3.0
+FROM m4ucorp/tools:docker-rails.ruby-2.3.0
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 ENV RAILS_VERSION 4.2.5.1
@@ -35,8 +35,4 @@ fi; \
 chmod -x /etc/service/syslog-ng/run /etc/service/syslog-forwarder/run
 
 ONBUILD EXPOSE 8080
-
-#ONBUILD ATTACH ["/bin/bash"]
-
-#PUSH elifarley/docker-rails:rails-4.2.5.1
 
